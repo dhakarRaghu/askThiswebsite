@@ -1,36 +1,43 @@
 import { cn } from "./utils";
-import { User, Bot } from "lucide-react";
+import { User, Bot } from 'lucide-react';
 
-
-interface MessageProps{
-    content: string;
-    isUserMessage: boolean;
+interface MessageProps {
+  content: string;
+  isUserMessage: boolean;
 }
 
-export const Message = ({content, isUserMessage}: MessageProps) => {
-    return (
-        <div 
-        className={cn({
-            "bg-zinc-800": isUserMessage,
-            "bg-zinc-900/25" : !isUserMessage
-        })}
+export const Message = ({ content, isUserMessage }: MessageProps) => {
+  return (
+    <div
+      className={cn("rounded-lg p-4", {
+        "bg-blue-600 ml-auto": isUserMessage,
+        "bg-zinc-700": !isUserMessage,
+      })}
+    >
+      <div className="flex items-start gap-4 max-w-3xl mx-auto">
+        <div
+          className={cn(
+            "flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center",
+            {
+              "bg-blue-700": isUserMessage,
+              "bg-zinc-600": !isUserMessage,
+            }
+          )}
         >
-            <div className="p-6">
-                <div className="max-w-3xl mx-auto flex items-start gap-2.5">
-                    <div className={cn("size-10 shrink-0 aspect-square rounded-full border border-l-zinc-700 bg-zinc-900 flex justify-center items-center",{
-                        "bg-blue-950 border-blue-700 text-zinc-200" : isUserMessage,
-                    })}>
-                        {isUserMessage ? <User className="size-5"/> : <Bot className=" size-5
-                        text-white" /> }
-                    </div>
-                    <div className="flex flex-col ml-6 w-full">
-                        <div className="flex items-center space-x-2"> 
-                            <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                                {isUserMessage? "You": "Website"}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          {isUserMessage ? (
+            <User className="w-5 h-5 text-white" />
+          ) : (
+            <Bot className="w-5 h-5 text-white" />
+          )}
         </div>
-    )
-}
+        <div className="flex-1 overflow-hidden">
+          <p className="text-sm font-semibold text-white mb-1">
+            {isUserMessage ? "You" : "Website"}
+          </p>
+          <p className="text-white whitespace-pre-wrap break-words">{content}</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
