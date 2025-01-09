@@ -7,31 +7,31 @@ interface PageProps {
         url: string | string[] | undefined;
     }
 }
-
-function reconstructUrl({url} : {url: string[]}) {
-    const de = url.map((u) => decodeURIComponent(u));
+function reconstructUrl({ url }: { url: string[] }) {
+   const de = url.map((component) => decodeURIComponent(component));
     return de.join("/");
 }
 
-const Page = async ({params} : PageProps) => {
+const Page = async ({ params }: PageProps )=> {
 
-    const reconstructedUrl = reconstructUrl({url :params.url as string[]});
-    // console.log(reconstructedUrl);
+    const reconstructedUrl = reconstructUrl({ url: params.url as string[] });
+    // console.log("Reconstructed URL:", reconstructedUrl);
+
     const isAlready = await redis.sismember("indexed_urls", reconstructedUrl);
 
-    const sessionId = "mock-session"
+    const sessionId = "mock-session";
 
-   if(!isAlready) {
-    await ragChat.context.add({
-        type: "html",
-        source : reconstructedUrl,
-        config: { chunkOverlap : 100 , chunkSize : 1000}, 
-    });
+    if (!isAlready) {
+        await ragChat.context.add({
+            type: "html",
+            source: reconstructedUrl,
+            config: { chunkOverlap: 100, chunkSize: 1000 },
+        });
 
-    await redis.sadd("indexed_urls", reconstructedUrl);
+        await redis.sadd("indexed_urls", reconstructedUrl);
+    }
 
-   }
     return <ChatWrapper sessionId={sessionId} />;
-}
+};
 
 export default Page;
